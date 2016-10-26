@@ -3,11 +3,26 @@
 <head>
     <title>Local Weather</title>
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" type="text/css" href="/lib/node_modules/bootstrap/dist/css/bootstrap-theme.min.css">
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" type="text/css" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.min.css">
     <!-- Custom CSS -->
     <link rel="stylesheet" type="text/css" href="styles/main.css">
 </head>
 <body>
+    <div class="container">
+        <div class="row">
+            <div class="panel panel-default search-bar col-xs-offset-3">
+                <div class="panel-body">
+                    <input class="form-control" type="text" id="zip-code" placeholder="Enter Zip Code">
+                    <button type="button" class="btn btn-primary btn-lg" id="submit"  data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>Wait for it.....">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="output"></div>
+
 
     <!-- Jquery -->
     <script src="/lib/node_modules/jquery/dist/jquery.min.js" type="text/javascript" charset="utf-8"></script>
@@ -20,8 +35,8 @@
 
 <!-- I will have to research this one, technically I can't do this yet
      they should be presented with an authentication mechanism that allows login via Google, Twitter, Facebook, or Github. Pick one, at a minimum, but if you want to add all, that would be impressive. -->
-<!-- there should be an input field to accept a zip code value -->
-<!-- there should be a submit button next to the zip code field -->
+<!-- there should be an input field to accept a zip code value  Done -->
+<!-- there should be a submit button next to the zip code field Done -->
 
 
 
