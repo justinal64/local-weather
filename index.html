@@ -14,14 +14,24 @@
         <div class="row">
             <div class="panel panel-default search-bar col-xs-offset-3">
                 <div class="panel-body">
-                    <input class="form-control" type="text" id="zip-code" value="37128" placeholder="Enter Zip Code">
+                    <input class="form-control" type="text" id="zip-code" value="37128" placeholder="Enter Zip Code" data-toggle="tooltip">
                     <button type="button" class="btn btn-primary btn-lg" id="submit"  data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>Wait for it.....">Submit</button>
                 </div>
             </div>
         </div>
-    </div>
+        <div id="output" class="hidden">
+            <div class="row">
+                <div class="col-md-2 col-md-offset-1" id="county-name"><strong>County Name:</strong></div>
+                <div class="col-md-2" id="current-temp"><strong>Current Temperature:</strong></div>
+                <div class="col-md-2" id="conditions"><strong>Conditions:</strong> </div>
+                <div class="col-md-2" id="pressure"><strong>Pressure:</strong></div>
+                <div class="col-md-2" id="wind-speed"><strong>Wind Speed:</strong></div>
+            </div>
+            <div class="row">
 
-    <div id="output"></div>
+            </div>
+        </div>
+
 
 
     <!-- Jquery -->

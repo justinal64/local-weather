@@ -11,8 +11,8 @@ then the current weather for the provided zip code should be displayed, which in
 
 1. Temperature Done
 2. Conditions Done
-3. Air pressure
-4. Wind speed
+3. Air pressure Done
+4. Wind speed Done
 
 I don't know how to do this yet....
 An affordance to view the forecast for the current day, the next three days, or the next 7 days
@@ -21,7 +21,7 @@ An affordance to view the forecast for the current day, the next three days, or 
 
 let $zipCode = $('#zip-code');
 let $submit = $('#submit');
-
+let $output = $('#output');
 let dataArray = {};
 let apiKeys = {};
 
@@ -63,8 +63,8 @@ $submit.click(() => {
     let result = valZip($zipEntered);
     if(result) {
         weatherList($zipEntered);
-        // Execute promise and return results
-
+        // remove the hidden class for the output area
+        $output.removeClass( "hidden" );
     } else {
         // display tooltip that says why the user can't procede
     }
@@ -78,11 +78,12 @@ $zipCode.keypress(function (e) {
         let result = valZip($zipEntered);
         if(result) {
             weatherList($zipEntered);
-            // Execute promise and return results
-
+            // remove the hidden class for the output area
+            $output.removeClass("hidden");
         } else {
-            // display tooltip that says why the user can't procede
-
+            // display tooltip that says why the user can't proceed
+            // not working...
+            $('[data-toggle="tooltip"]').tooltip();
         }
     }
 });
@@ -90,12 +91,12 @@ $zipCode.keypress(function (e) {
 function displayData(data) {
     // write each one to the dom
     console.log("data", data);
-    // console.log("data.city.name", data.city.name);
-    $('#output').append(`<p><strong>County Name:</strong> ${data.name}</p>`);
-    $('#output').append(`<p><strong>Current Temperature:</strong> ${data.main.temp}</p>`);
-    $('#output').append(`<p><strong>Conditions:</strong> ${data.weather[0].description}</p>`);
-    $('#output').append(`<p><strong>Pressure:</strong> ${data.main.pressure}</p>`);
-    $('#output').append(`<p><strong>Wind Speed:</strong> ${data.wind.speed}</p>`);
+
+    $('#county-name').append(`<p>${data.name}</p>`);
+    $('#current-temp').append(`<p>${data.main.temp}</p>`);
+    $('#conditions').append(`<p>${data.weather[0].description}</p>`);
+    $('#pressure').append(`<p>${data.main.pressure}</p>`);
+    $('#wind-speed').append(`<p>${data.wind.speed}</p>`);
 }
 
 // validates the user input field
