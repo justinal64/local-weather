@@ -13,7 +13,7 @@
     <div class="container">
         <!-- Login Section -->
         <div class="container col-xs-4 col-xs-offset-4" id="login-container">
-            <h1 class="form-signin-heading">Todo App</h1>
+            <h1 class="form-signin-heading">Weather App</h1>
             <input type="email" id="inputEmail" class="form-control" placeholder="Email address" value="a@a.com"required autofocus>
             <input type="password" id="inputPassword" class="form-control" placeholder="Password" value="123456"required>
             <input type="text" id="inputUsername" class="form-control" placeholder="Username" value="jal" required>
@@ -27,15 +27,22 @@
                 <div class="panel panel-default search-bar col-xs-offset-3">
                     <div class="panel-body">
                         <input class="form-control" type="text" id="zip-code" value="37128" placeholder="Enter Zip Code" data-toggle="tooltip">
-                        <button type="button" class="btn btn-primary btn-lg" id="oneday"  data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>Wait for it.....">1 Day Forcast</button>
-                        <button type="button" class="btn btn-primary btn-lg" id="threeday"  data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>Wait for it.....">3 Day Forcast</button>
-                        <button type="button" class="btn btn-primary btn-lg" id="fiveday"  data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>Wait for it.....">5 Day Forcast</button>
+                        <button type="button" class="btn btn-primary btn-md" id="oneday"  data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>Wait for it.....">1 Day Forcast</button>
+                        <button type="button" class="btn btn-primary btn-md" id="threeday"  data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>Wait for it.....">3 Day Forcast</button>
+                        <button type="button" class="btn btn-primary btn-md" id="fiveday"  data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>Wait for it.....">5 Day Forcast</button>
+                        <button type="button" class="btn btn-primary btn-md" id="saved-search"  data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i>Wait for it.....">Saved Searches</button>
                     </div>
                 </div>
             </div>
         </div>
         <div id="output" class="hidden">
             <div class="row">
+
+            </div>
+        </div>
+        <div class="saved-search hidden">
+            <h2>Saved Search History</h2>
+            <div id="search-history">
 
             </div>
         </div>

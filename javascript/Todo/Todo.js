@@ -19,7 +19,7 @@ function deleteTodo(apiKeys, id){
     return new Promise((resolve, reject) => {
         $.ajax({
             method:  'DELETE',
-            url:`${apiKeys.databaseURL}/family/${id}.json`
+            url:`${apiKeys.databaseURL}/items/${id}.json`
             }).then((response) => {
             resolve(response);
             }, (error) => {
@@ -47,7 +47,7 @@ function getTodos(apiKeys){
     return new Promise((resolve, reject) => {
         $.ajax({
             method:  'GET',
-            url:`${apiKeys.databaseURL}/family.json`
+            url:`${apiKeys.databaseURL}/items.json`
         }).then((response) => {
             let items = [];
             Object.keys(response).forEach(function(key){

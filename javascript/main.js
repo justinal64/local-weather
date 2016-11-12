@@ -34,50 +34,13 @@ let apiKeys = {};
 let firebaseCred = {};
 let openweatherCred = {};
 let uid = "";
+let id = 1;
 
 console.log("fbAuth", fbAuth);
 console.log("Credentials", Credentials);
 console.log("todos", todos);
 console.log("user", User);
 console.log("Weather", Weather);
-
-
-
-
-// let credentials = () => {
-//   return new Promise ((resolve, reject) => {
-//     $.ajax({
-//       method: 'GET',
-//       url: 'apiKeys.json'
-//     }).then((response) => {
-//         firebaseCred = response.firebase;
-//         openweatherCred = response.openweather;
-//         console.log("firebaseCred", firebaseCred);
-//         console.log("openweatherCred", openweatherCred);
-//       apiKeys = response; // Do I need this???
-//       resolve(response);
-//       // $.ajax({
-//       //   method: 'GET',
-//       //   // headers:{
-//       //   //   'Authorization': authHeader
-//       //   // },
-//       //   url: `http://api.openweathermap.org/data/2.5/weather?zip=${searchText}&units=imperial&APPID=${openweatherCred.Key}`
-//       // }).then((response2)=>{
-//       //   // console.log("response2", response2.list);
-//       //   dataArray = response2;
-//       //   displayData(dataArray);
-//       //   resolve(response2);
-//       // }, (errorResponse2) => {
-//       //   reject(errorResponse2);
-//       // });
-//     }, (errorResponse) =>{
-//       reject(errorResponse);
-//     });
-//   });
-// };
-
-// Get credentials on page load
-// credentials();
 
 // eventListeners for Login/Register Buttons
 $('#loginButton').on("click", function() {
@@ -144,16 +107,26 @@ $(document).ready(function(){
 // eventListener on the submit button
 // Better way to do onEnter and onClick of a button/input????
 $oneDay.click(() => {
+    // clear the dom
+    $($output).html("");
+
     let $zipEntered = $zipCode.val();
     let result = valZip($zipEntered);
     let owCredentialds = Credentials.owCreds();
     if(result) {
-        // weatherList($zipEntered);
-        // FbAPI.getMovie(apiKeys, itemId).then((movie) => {
         Weather.weatherOneDay(owCredentialds, $zipEntered).then((weatherOneDay) => {
-            console.log("weatherOneDay", weatherOneDay);
-            // Display the response in the dom
-            displayData(weatherOneDay);
+        let weather = {
+            "County": weatherOneDay.name,
+            "Temp": weatherOneDay.main.temp,
+            "Desc": weatherOneDay.weather[0].description,
+            "Air_Pressure": weatherOneDay.main.pressure,
+            "Wind_Speed": weatherOneDay.wind.speed,
+            "uid": uid
+        };
+
+        // Display the response in the dom
+        displayData(weather, "#output");
+        id++;
         });
         // remove the hidden class for the output area
         $output.removeClass( "hidden" );
@@ -164,20 +137,37 @@ $oneDay.click(() => {
 
 // eventListener for save button
 $(document).on('click', '.save-button', (e) => {
-    // trying to get the data from all the field to store in db
-    // THIS IS WHAT I AM CURRENTLY WORKING ON
-    let gatherData = e.target.parentElement.parentElement;
-    let test = $(gatherData, "#country");
-    console.log("test", test);
-    // weather = {
-    //     "name": response.Title,
-    //     "year": response.Year,
-    //     "actors": Actors,
-    //     "rating": Math.round(parseFloat(response.imdbRating) / 2),
-    //     "imdbID": response.imdbID
-    // };
+    let currentTarget = e.currentTarget;
+    getWeather(currentTarget);
+});
 
-    // console.log("e", e.target.parentElement.parentElement);
+// eventListener for delete button
+// event is firing to fast and not deleting from dom until 2nd click....
+$(document).on('click', '#delete-button', (e) => {
+    let idToDelete = e.currentTarget.getAttribute("data-id");
+    todos.deleteTodo(firebaseCred, idToDelete).then(todos.getTodos(firebaseCred)
+        .then((weatherReturned) => {
+            $('#search-history').html("");
+            $.each(weatherReturned, function(key, value) {
+            displayData(value, "#search-history");
+            console.log("test");
+        });
+        })
+    );
+});
+
+
+// View saved search history
+$('#saved-search').on('click', () => {
+    todos.getTodos(firebaseCred).then((weatherReturned) => {
+        console.log("weatherReturned", weatherReturned);
+        $.each(weatherReturned, function(key, value) {
+            displayData(value, "#search-history");
+        });
+    });
+
+    // Show hidden search button
+    $('.saved-search').removeClass("hidden");
 });
 
 // When the user hits enter in the input field.
@@ -199,24 +189,36 @@ $zipCode.keypress(function (e) {
     }
 });
 
+// Gets data on the currently displayed forcast
+function getWeather(currentTarget) {
+    let weather = {
+        "County": currentTarget.getAttribute("data-name"),
+        "Temp": currentTarget.getAttribute("data-temp"),
+        "Desc": currentTarget.getAttribute("data-desc"),
+        "Air_Pressure": currentTarget.getAttribute("data-pressure"),
+        "Wind_Speed": currentTarget.getAttribute("data-windspeed"),
+        "uid": uid
+    };
+    // Add to the fb db
+    todos.addTodo(firebaseCred, weather);
+}
+
 // Add data to the dom
-// I will probably need to convert this to a foreach loop.
-function displayData(data) {
+function displayData(data, location) {
+    console.log("data", data);
     let html = "<div class='row'>";
-        html += `<div class="col-md-2" id="county" data-name="${data.name}"><strong>County Name:</strong><p>${data.name}</p></div>`;
-        html += `<div class="col-md-2" id="temp" data-temp="${data.main.temp}"><strong>Temperature:</strong><p>${data.main.temp}</p></div>`;
-        html += `<div class="col-md-2" id="desc" data-desc="${data.weather[0].description}"><strong>Description:</strong><p>${data.weather[0].description}</p></div>`;
-        html += `<div class="col-md-2" id="pressure" data-pressure="${data.main.pressure}"><strong>Air Pressure:</strong><p>${data.main.pressure}</p></div>`;
-        html += `<div class="col-md-2" id="speed" data-speed="${data.wind.speed}"><strong>Wind Speed:</strong><p>${data.wind.speed}</p></div>`;
-        html += `<div><button class="btn btn-lg btn-success col-md-1 save-button">Save</button></div>`;
+        html += `<div class="col-md-2" id="county"><strong>County Name:</strong><p>${data.County}</p></div>`;
+        html += `<div class="col-md-2" id="temp"><strong>Temperature:</strong><p>${data.Temp}</p></div>`;
+        html += `<div class="col-md-2" id="desc"><strong>Description:</strong><p>${data.Desc}</p></div>`;
+        html += `<div class="col-md-2" id="pressure"><strong>Air Pressure:</strong><p>${data.Air_Pressure}</p></div>`;
+        html += `<div class="col-md-2" id="speed"><strong>Wind Speed:</strong><p>${data.Wind_Speed}</p></div>`;
+        if(location === "#output") {
+            html += `<div><button class="btn btn-lg btn-success col-md-1 save-button" data-name="${data.County}" data-temp="${data.Temp}" data-desc="${data.Desc}" data-pressure="${data.Air_Pressure}" data-windspeed="${data.Wind_Speed}">Save</button></div>`;
+        } else {
+            html += `<div><button class="btn btn-lg btn-danger col-md-1" id="delete-button" data-id="${data.id}">Delete</button></div>`;
+        }
     html += "</div>";
-    $('#output').append(html);
-    // $('#county-name').append(`<p>${data.name}</p>`);
-    // $('#current-temp').append(`<p>${data.main.temp}</p>`);
-    // $('#conditions').append(`<p>${data.weather[0].description}</p>`);
-    // $('#pressure').append(`<p>${data.main.pressure}</p>`);
-    // $('#wind-speed').append(`<p>${data.wind.speed}</p>`);
-    // $('.save-button').append(`<div><button class="btn btn-lg btn-success col-xs-6" id="loginButton">Save</button></div>`);
+    $(location).append(html);
 }
 
 // validates the user input field

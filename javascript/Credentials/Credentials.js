@@ -9,10 +9,11 @@ function credentials() {
             method: 'GET',
             url: `../../apiKeys.json`
         }).then((response)=>{
-        firebaseCred = response.firebase;
-        openweatherCred = response.openweather;
-        console.log("firebaseCred", firebaseCred);
-        console.log("openweatherCred", openweatherCred);
+            console.log("response", response);
+            firebaseCred = response.firebase;
+            openweatherCred = response.openweather;
+            console.log("firebaseCred", firebaseCred);
+            console.log("openweatherCred", openweatherCred);
             resolve(response);
         }, (error)=>{
             reject(error);
